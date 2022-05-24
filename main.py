@@ -1,14 +1,16 @@
 import random
 import helper_functions
+import time
+import datetime as dt
 
 with open('arrested_development.txt') as file:
     ad = file.read()
 
 ad = ad.split(',')
-phrase = random.choice(ad)
-poem = helper_functions.bigram_poem(phrase)
+# phrase = random.choice(ad)
+# ad_poem = helper_functions.bigram_poem(phrase)
 
-print(poem)
+# print(ad_poem)
 
 
 
@@ -29,16 +31,44 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 
 api = tweepy.API(auth)
 
-# Query
-query = api.search_tweets(q='machine learning', lang='en', count=100)
 
+while True:
+    # print(dt.datetime.now())
+    # query = api.search_tweets(q='machine learning', lang='en', count=100, result_type='recent')
+    # for i in range(len(query)):
+    #     tweet = query[i]
+    #
+    #     if helper_functions.conditions_met(tweet):
+    #         poem = helper_functions.bigram_tweet(tweet)
+    #         # poem = helper_functions.bigram_poem(tweet.text)
+    #         print(poem, dt.datetime.now(), '\n')
+    #
+    #         # phrase = random.choice(ad)
+    #         # ad_poem = helper_functions.bigram_poem(phrase)
+    #         api.update_status(poem)
+    #
+    #         break
+    #
+    # time.sleep(60)
 
-for i in range(len(query)):
-    tweet = query[i]
+    try:
+        query = api.search_tweets(q='machine learning', lang='en', count=100, result_type='recent')
+        for i in range(len(query)):
+            tweet = query[i]
 
-    if helper_functions.conditions_met(tweet):
+            if helper_functions.conditions_met(tweet):
+                poem = helper_functions.bigram_tweet(tweet)
+                # poem = helper_functions.bigram_poem(tweet.text)
+                print(poem, '\n')
 
-        helper_functions.bigram_tweet(tweet)
+                # phrase = random.choice(ad)
+                # ad_poem = helper_functions.bigram_poem(phrase)
+                api.update_status(poem)
 
-        break
+                break
 
+    except Exception as e:
+        print(e)
+
+    print(dt.datetime.now())
+    time.sleep(60)

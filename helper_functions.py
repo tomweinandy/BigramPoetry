@@ -6,16 +6,17 @@ def conditions_met(tweet):
     conditions_list = ['RT' not in tweet.text,
                        len(tweet.text.split(' ')) > 2,
                        # 'http' not in tweet.text,
+                       tweet.text[0] != '@',
                        tweet.lang == 'en',
                        tweet.user.screen_name != 'BrigramPoetry']
     return all(conditions_list)
 
 
 def cleaner(phrase):
-    # phrase = phrase.replace('\n', ' ').replace('VIDEO', '')  # remove edge cases with bad formatting
-    # phrase = phrase.replace(' -', ' ').replace(' –', ' ').replace(' ‘', '')
-    # phrase = phrase.replace('- ', ' ').replace(' /', ' ').replace('— ', ' ')
-    # phrase = phrase.replace(': ', ' ').replace(':)', '').replace('&amp', 'and')
+    phrase = phrase.replace('\n', ' ').replace('VIDEO', '')  # remove edge cases with bad formatting
+    phrase = phrase.replace(' -', ' ').replace(' –', ' ').replace(' ‘', '')
+    phrase = phrase.replace('- ', ' ').replace(' /', ' ').replace('— ', ' ')
+    phrase = phrase.replace(': ', ' ').replace(':)', '').replace('&amp', 'and')
 
     rejects = '¿.?!,[]|"“();…{}«•*+@~<>'                                  # define punctuation to be removed
     phrase_reject = phrase.translate({ord(c): None for c in rejects})     # remove defined punctuation
@@ -44,5 +45,4 @@ def bigram_tweet(tweet):
 
     # twitter.update_status(status=full_tweet)  # tweet out on @BigramPoetry account
 
-    print(full_tweet)  # print result, timestamp (for testing)
-    print(dt.datetime.now(), '\n')
+    return full_tweet

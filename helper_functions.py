@@ -1,4 +1,5 @@
 import nltk
+import re
 
 
 def conditions_met(tweet):
@@ -31,7 +32,8 @@ def cleaner(phrase):
 
     rejects = ':¿.?!,[]|"“();…{}«•*+@~<>'                              # define punctuation to be removed
     phrase_reject = phrase.translate({ord(c): None for c in rejects})  # remove defined punctuation
-    phrase_split = phrase_reject.split(' ')                            # split phrase by whitespace
+    phrase_no_url = re.sub(r'http\S+', '', phrase_reject)              # remove urls
+    phrase_split = phrase_no_url.split(' ')                            # split phrase by whitespace
     phrase_list = list(filter(None, phrase_split))                     # strip any extra whitespace
     return phrase_list
 

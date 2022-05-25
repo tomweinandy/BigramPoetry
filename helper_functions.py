@@ -23,13 +23,13 @@ def cleaner(phrase):
     :param phrase: Tweet text input
     :return: List of words from the tweet
     """
-    # Remove edge cases with bad formatting
-    phrase = phrase.replace('\n', ' ').replace('VIDEO', '')
-    phrase = phrase.replace(' -', ' ').replace(' –', ' ').replace(' ‘', '')
-    phrase = phrase.replace('- ', ' ').replace(' /', ' ').replace('— ', ' ')
-    phrase = phrase.replace(': ', ' ').replace(':)', '').replace('&amp', 'and')
+    # Remove problematic strings and characters
+    replacers = ['\n', 'VIDEO', ' -', '- ', '— ', ' —', ' /']
+    for replacer in replacers:
+        phrase = phrase.replace(replacer, ' ')                         # replace with whitespace
+    phrase = phrase.replace('&amp', 'and')
 
-    rejects = '¿.?!,[]|"“();…{}«•*+@~<>'                               # define punctuation to be removed
+    rejects = ':¿.?!,[]|"“();…{}«•*+@~<>'                              # define punctuation to be removed
     phrase_reject = phrase.translate({ord(c): None for c in rejects})  # remove defined punctuation
     phrase_split = phrase_reject.split(' ')                            # split phrase by whitespace
     phrase_list = list(filter(None, phrase_split))                     # strip any extra whitespace
@@ -43,11 +43,11 @@ def bigram_poem(phrase_raw):
     :return: A bigram poem from the first 8 words
     """
     phrase_cleaned = cleaner(phrase_raw)
-    phrase_shortened = phrase_cleaned[0:8]                             # only use the first 8 words
-    phrase_bigram = list(nltk.bigrams(phrase_shortened))               # convert to bigram list
-    poem = ''                                                          # create new string
-    for bigram in phrase_bigram:                                       # loop through bigrams
-        poem += ' ' + bigram[0] + ' ' + bigram[1] + ' \n'              # add looped bigrams to string w line break
+    phrase_shortened = phrase_cleaned[0:8]                 # only use the first 8 words
+    phrase_bigram = list(nltk.bigrams(phrase_shortened))   # convert to bigram list
+    poem = ''                                              # create new string
+    for bigram in phrase_bigram:                           # loop through bigrams
+        poem += ' ' + bigram[0] + ' ' + bigram[1] + ' \n'  # add looped bigrams to string w line break
     return poem
 
 
